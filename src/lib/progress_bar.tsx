@@ -12,8 +12,6 @@
 import * as React from "react";
 import BootstrapProgressBar from "react-bootstrap/ProgressBar";
 
-import { ReactComponent } from "./component";
-
 interface ProgressProps {
   estimated: number;
   className?: string;
@@ -30,7 +28,7 @@ class ProgressState {
   }
 }
 
-export class ProgressBar extends ReactComponent<ProgressProps, ProgressState> {
+export class ProgressBar extends React.Component<ProgressProps, ProgressState> {
   intervalHandle?: number;
 
   constructor(props: ProgressProps) {
@@ -47,7 +45,7 @@ export class ProgressBar extends ReactComponent<ProgressProps, ProgressState> {
   }
 
   render() {
-    let value = 0;
+    let value;
     const elapsed =
       this.state.currentTime.getTime() - this.state.startTime.getTime();
 
@@ -76,7 +74,7 @@ interface ProgressSpinnerProps {
   style?: React.CSSProperties;
 }
 
-export class ProgressSpinner extends ReactComponent<ProgressSpinnerProps> {
+export class ProgressSpinner extends React.Component<ProgressSpinnerProps> {
   render() {
     return <div className="spinner-border spinner-border-sm" role="status" />;
   }

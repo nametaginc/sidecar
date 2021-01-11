@@ -6,23 +6,22 @@ class Profile {
 }
 
 export const GetProfile = async () => {
-    const tokenStr = localStorage.getItem("token")
-    if (!tokenStr) {
+    const token = localStorage.getItem("token")
+    if (!token) {
         return null
     }
-    const token = JSON.parse(atob(tokenStr.split(".")[1])) as IDToken
 
     const resp = await fetch(nametagURL + "/people/me/properties/nt:name,nt:email" +
-        "?token=" + encodeURI(tokenStr))
+        "?token=" + encodeURI(token))
     const respBody = await resp.json() as PropertiesResponse
 
     const rv = new Profile()
 
-    const nameProp = respBody.properties.find(p => p.scope == "nt:name")
+    const nameProp = respBody.properties.find(p => p.scope === "nt:name")
     if (nameProp) {
         rv.name = nameProp.value as string
     }
-    const emailProp = respBody.properties.find(p => p.scope == "nt:email")
+    const emailProp = respBody.properties.find(p => p.scope === "nt:email")
     if (emailProp) {
         rv.name = emailProp.value as string
     }

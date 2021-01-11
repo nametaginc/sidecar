@@ -9,7 +9,7 @@
  * forbidden except by express written permission of Nametag, Inc.
  */
 
-import React, { ReactNode, Suspense } from "react";
+import React, { ReactNode } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import wordmark from "./logo-horizontal.svg";
