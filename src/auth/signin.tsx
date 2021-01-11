@@ -52,11 +52,28 @@ export const RootURL = () => {
   return window.location.origin
 }
 
-export const nametagURL = "https://ross.nametagdev.com" //"https://nametagstaging.com"
-export const nametagClientID = "408915b2-7ba5-4b43-bb0e-f6b99e24b247" //"06650b60-f0a7-43b1-9760-f8c77a9fa429";
+export const nametag = (() => {
+  switch (RootURL()) {
+    case "localhost:3000":
+      return {
+        URL: "https://ross.nametagdev.com",
+        ClientID: "408915b2-7ba5-4b43-bb0e-f6b99e24b247",
+      }
+    case "https://sidecar.ninja":
+      return {
+        URL: "https://nametagstaging.com",
+        ClientID: "06650b60-f0a7-43b1-9760-f8c77a9fa429",
+      }
+    default:
+      return {
+        URL: "",
+        ClientID: "",
+      }
+  }
+})()
 
 export const AuthorizeURL = async (state: string) => {
-  const clientID = nametagClientID;
+  const clientID = nametag.ClientID;
   const scopes = ["nt:email", "nt:name"];
   const q = new URLSearchParams();
   q.set("client_id", clientID);
@@ -71,7 +88,7 @@ export const AuthorizeURL = async (state: string) => {
   q.set("code_challenge", pkce.challenge);
   q.set("code_challenge_method", pkce.challengeMethod);
 
-  const authorizeURL = nametagURL + "/authorize?" + q.toString();
+  const authorizeURL = nametag.URL + "/authorize?" + q.toString();
   return authorizeURL;
 };
 

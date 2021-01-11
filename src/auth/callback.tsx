@@ -14,7 +14,7 @@ import { useLocation } from "react-router-dom";
 import { useHistory } from "react-router";
 import { ProgressBar } from "../lib/progress_bar";
 import { Page } from "../page";
-import {nametagClientID, nametagURL, RootURL} from "./signin";
+import {nametag, RootURL} from "./signin";
 
 export const AuthCallbackPage: React.FunctionComponent<{}> = () => {
   const location = useLocation();
@@ -27,7 +27,7 @@ export const AuthCallbackPage: React.FunctionComponent<{}> = () => {
       const state = query.get("state");
       const body = new FormData();
       body.set("grant_type", "authorization_code");
-      body.set("client_id", nametagClientID);
+      body.set("client_id", nametag.ClientID);
       body.set("code", code || "");
       body.set("redirect_uri", RootURL() + "/callback");
 
@@ -36,7 +36,7 @@ export const AuthCallbackPage: React.FunctionComponent<{}> = () => {
         body.set("code_verifier", codeVerifier);
       }
 
-      const resp = await fetch(nametagURL + "/token", {
+      const resp = await fetch(nametag.URL + "/token", {
         method: "POST",
         body: body,
       });

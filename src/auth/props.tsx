@@ -1,4 +1,4 @@
-import {nametagURL} from "./signin";
+import {nametag} from "./signin";
 
 class Profile {
     name: string = ""
@@ -11,7 +11,7 @@ export const GetProfile = async () => {
         return null
     }
 
-    const resp = await fetch(nametagURL + "/people/me/properties/nt:name,nt:email" +
+    const resp = await fetch(nametag.URL + "/people/me/properties/nt:name,nt:email" +
         "?token=" + encodeURI(token))
     const respBody = await resp.json() as PropertiesResponse
 
