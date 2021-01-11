@@ -38,12 +38,3 @@ interface PropertyData {
     value: any
     exp: number
 }
-interface IDToken {
-    aud: string
-    exp: number
-    iat: number
-    iss: string
-    nbf: number
-    sub: string
-}
-
