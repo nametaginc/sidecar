@@ -23,12 +23,18 @@ export const AuthCallbackPage: React.FunctionComponent<{}> = () => {
   useEffect(() => {
     const exchange = async () => {
       const query = new URLSearchParams(location.hash.replace(/^#/, ""));
+      const error = query.get("error");
       const code = query.get("code");
       const state = query.get("state");
+      if (error || !code) {
+        history.push("/");
+        return
+      }
+
       const body = new FormData();
       body.set("grant_type", "authorization_code");
       body.set("client_id", nametag.ClientID);
-      body.set("code", code || "");
+      body.set("code", code );
       body.set("redirect_uri", RootURL() + "/callback");
 
       const codeVerifier = window.sessionStorage.getItem("code_verifier");
@@ -51,7 +57,7 @@ export const AuthCallbackPage: React.FunctionComponent<{}> = () => {
       // clear the entire query cache when the token changes
       window.sessionStorage.removeItem("code_verifier");
 
-      history.push(state || "/manage");
+      history.push(state || "/");
     };
     exchange();
   }, [history, location.hash]);
