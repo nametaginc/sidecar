@@ -15,6 +15,10 @@ export const GetProfile = async () => {
         "?token=" + encodeURI(token))
     const respBody = await resp.json() as PropertiesResponse
 
+    if (!respBody.properties) {
+        return null
+    }
+
     const rv = new Profile()
 
     const nameProp = respBody.properties.find(p => p.scope === "nt:name")
