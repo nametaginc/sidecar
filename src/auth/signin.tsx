@@ -62,7 +62,7 @@ export const nametag = (() => {
     case "https://sidecar.ninja":
       return {
         URL: "https://nametagstaging.com",
-        ClientID: "06650b60-f0a7-43b1-9760-f8c77a9fa429",
+        ClientID: "55578457-e684-464d-9366-1ca6c329f74f",
       }
     default:
       return {
