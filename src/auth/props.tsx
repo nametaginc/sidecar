@@ -25,9 +25,12 @@ export const GetProfile = async () => {
     if (nameProp) {
         rv.name = nameProp.value as string
     }
-    const emailProp = respBody.properties.find(p => p.scope === "nt:email")
-    if (emailProp) {
-        rv.name = emailProp.value as string
+
+    if (!rv.name) {
+        const emailProp = respBody.properties.find(p => p.scope === "nt:email")
+        if (emailProp) {
+            rv.name = emailProp.value as string
+        }
     }
     return rv
 }
