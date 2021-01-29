@@ -10,104 +10,49 @@
  */
 
 import React from "react";
-import * as H from "history";
 import { Nav, NavDropdown, Spinner } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import { useQuery } from "react-query";
-import { bytesToBase64 } from "../lib/string";
 import { useHistory } from "react-router";
 import {GetProfile} from "./props";
+import {Auth} from "@nametag/browser"
 
-const newPKCEverifier = async () => {
-  const verifierLenth = 43;
-  let verifier = "";
-  const alphabet =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  for (let i = 0; i < verifierLenth; i++) {
-    verifier += alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-  }
+export const auth = (() => {
+  switch (window.location.origin) {
+    case "http://localhost:3000":
+    {
+      const auth = new Auth({
+        ClientID: "319f99a0-1020-4774-b384-e3498e1fa5f9",
+      })
+      auth.server = "https://ross.nametagdev.com"
+      return auth
+    }
 
-  let challenge = verifier;
-  let challengeMethod = "plain";
-  try {
-    var digest = await crypto.subtle.digest(
-      "SHA-256",
-      new TextEncoder().encode(verifier)
-    );
-
-    challenge = bytesToBase64(new Uint8Array(digest));
-    challengeMethod = "S256";
-  } catch (err) {
-    // no change
-  }
-
-  return {
-    verifier: verifier,
-    challenge: challenge,
-    challengeMethod: challengeMethod,
-  };
-};
-
-export const RootURL = () => {
-  return window.location.origin
-}
-
-export const nametag = (() => {
-  switch (RootURL()) {
-    case "localhost:3000":
-      return {
-        URL: "https://ross.nametagdev.com",
-        ClientID: "408915b2-7ba5-4b43-bb0e-f6b99e24b247",
-      }
     case "https://sidecar.ninja":
-      return {
-        URL: "https://nametagstaging.com",
+    {
+      const auth = new Auth({
         ClientID: "55578457-e684-464d-9366-1ca6c329f74f",
-      }
+      })
+      auth.server = "https://nametagstaging"
+      return auth
+    }
+
     default:
-      return {
-        URL: "",
-        ClientID: "",
-      }
+      return new Auth({ClientID: "TODO-FILL-IN-CLIENT-ID"})
   }
 })()
-
-export const AuthorizeURL = async (state: string) => {
-  const clientID = nametag.ClientID;
-  const scopes = ["nt:email", "nt:name"];
-  const q = new URLSearchParams();
-  q.set("client_id", clientID);
-  q.set("scope", scopes.join(" "));
-  q.set("response_mode", "fragment");
-  q.set("state", state);
-  q.set("redirect_uri", RootURL() + "/callback");
-
-  const pkce = await newPKCEverifier();
-  window.sessionStorage.setItem("code_verifier", pkce.verifier);
-
-  q.set("code_challenge", pkce.challenge);
-  q.set("code_challenge_method", pkce.challengeMethod);
-
-  const authorizeURL = nametag.URL + "/authorize?" + q.toString();
-  return authorizeURL;
-};
-
-export const Signin = async (location: H.Location) => {
-  const url = await AuthorizeURL(location.pathname);
-  window.location.assign(url);
-};
 
 export const SigninOrProfile: React.FunctionComponent<{}> = () => {
   const location = useLocation();
   const history = useHistory();
 
   const Signin = async () => {
-    const url = await AuthorizeURL(location.pathname);
+    const url = await auth.AuthorizeURL(["nt:email", "nt:name"], location.pathname);
     window.location.assign(url);
   };
 
   const Signout = async () => {
-    localStorage.removeItem("token");
+    auth.Signout()
     profileQuery.refetch()
     history.push("/");
   };

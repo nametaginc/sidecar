@@ -1,47 +1,27 @@
-import {nametag} from "./signin";
+import {auth} from "./signin";
 
 class Profile {
     name: string = ""
     email: string = ""
 }
 
-export const GetProfile = async () => {
-    const token = localStorage.getItem("token")
-    if (!token) {
-        return null
-    }
+export const GetProfile = async (): Promise<Profile|null> => {
 
-    const resp = await fetch(nametag.URL + "/people/me/properties/nt:name,nt:email" +
-        "?token=" + encodeURI(token))
-    const respBody = await resp.json() as PropertiesResponse
-
-    if (!respBody.properties) {
+    const props = await auth.GetProperties(["nt:name", "nt:email"])
+    if (!props) {
         return null
     }
 
     const rv = new Profile()
-
-    const nameProp = respBody.properties.find(p => p.scope === "nt:name")
+    const nameProp = props.get("nt:name")
     if (nameProp) {
         rv.name = nameProp.value as string
     }
 
-    if (!rv.name) {
-        const emailProp = respBody.properties.find(p => p.scope === "nt:email")
-        if (emailProp) {
-            rv.name = emailProp.value as string
-        }
+    const emailProp = props.get("nt:email")
+    if (emailProp) {
+        rv.email = emailProp.value as string
     }
+
     return rv
-}
-
-interface PropertiesResponse {
-    sub: string
-    properties: PropertyData[]
-}
-
-interface PropertyData {
-    scope: string
-    value: any
-    exp: number
 }

@@ -9,6 +9,7 @@ import { QueryClient, QueryClientProvider } from 'react-query'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {AuthCallbackPage} from "./auth/callback";
+import {FirebaseIndex} from "./firebase_index";
 
 const queryClient = new QueryClient()
 
@@ -56,6 +57,7 @@ function App() {
                 <Switch>
                     <Route exact={true} path={"/"} render={() => <Index />} />
                     <Route exact={true} path={"/callback"} render={() => <AuthCallbackPage />} />
+                    <Route exact={true} path={"/firebase"} render={() => <FirebaseIndex />} />
                     <Route render={() => <NotFoundPage />} />
                 </Switch>
             </BrowserRouter>

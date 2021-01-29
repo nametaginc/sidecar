@@ -9,57 +9,26 @@
  * forbidden except by express written permission of Nametag, Inc.
  */
 
-import React, { useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import { useLocation } from "react-router-dom";
 import { useHistory } from "react-router";
 import { ProgressBar } from "../lib/progress_bar";
 import { Page } from "../page";
-import {nametag, RootURL} from "./signin";
+import {auth } from "./signin";
+import {Alert} from "react-bootstrap";
 
 export const AuthCallbackPage: React.FunctionComponent<{}> = () => {
   const location = useLocation();
   const history = useHistory();
 
+  const [error, setError ] = useState<any>(null)
+
   useEffect(() => {
-    const exchange = async () => {
-      const query = new URLSearchParams(location.hash.replace(/^#/, ""));
-      const error = query.get("error");
-      const code = query.get("code");
-      const state = query.get("state");
-      if (error || !code) {
-        history.push("/");
-        return
-      }
-
-      const body = new FormData();
-      body.set("grant_type", "authorization_code");
-      body.set("client_id", nametag.ClientID);
-      body.set("code", code );
-      body.set("redirect_uri", RootURL() + "/callback");
-
-      const codeVerifier = window.sessionStorage.getItem("code_verifier");
-      if (codeVerifier) {
-        body.set("code_verifier", codeVerifier);
-      }
-
-      const resp = await fetch(nametag.URL + "/token", {
-        method: "POST",
-        body: body,
-      });
-      const respBody = await resp.json();
-      const tokenStr = respBody["id_token"];
-      if (tokenStr) {
-        localStorage.setItem("token", tokenStr);
-      } else {
-        localStorage.removeItem("token");
-      }
-
-      // clear the entire query cache when the token changes
-      window.sessionStorage.removeItem("code_verifier");
-
+    auth.HandleCallback().then((state) => {
       history.push(state || "/");
-    };
-    exchange();
+    }).catch(err => {
+      setError(err)
+    })
   }, [history, location.hash]);
 
   // Note: annoyingly, nav=false is required here because if we don't, the
@@ -67,7 +36,12 @@ export const AuthCallbackPage: React.FunctionComponent<{}> = () => {
   // back into the authorize flow.
   return (
     <Page nav={false}>
-      <ProgressBar estimated={1000} />
+      {error ?
+          <Alert variant={"danger"}>
+            <strong>Error</strong>
+            <div>{error.toString()}</div>
+          </Alert>
+          : <ProgressBar estimated={1000} /> }
     </Page>
   );
 };
