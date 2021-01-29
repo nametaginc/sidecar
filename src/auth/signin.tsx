@@ -33,7 +33,7 @@ export const auth = (() => {
       const auth = new Auth({
         ClientID: "55578457-e684-464d-9366-1ca6c329f74f",
       })
-      auth.server = "https://nametagstaging"
+      auth.server = "https://nametagstaging.com"
       return auth
     }
 
