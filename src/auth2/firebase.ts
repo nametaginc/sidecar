@@ -53,11 +53,9 @@ export class Firebase {
 
   async start(scopes: string[]) {
     const token = auth.Token()
-    if (token && token.firebaseCustomToken) {
-      await firebase.auth().signInWithCustomToken(token.firebaseCustomToken)
+    if (token && token.firebase_custom_token) {
+      await firebase.auth().signInWithCustomToken(token.firebase_custom_token)
       return
     }
-
-
   }
 }
