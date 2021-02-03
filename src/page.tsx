@@ -1,19 +1,8 @@
-/**
- * Copyright 2020 Nametag Inc.
- *
- * All information contained herein is the property of Nametag Inc.. The
- * intellectual and technical concepts contained herein are proprietary, trade
- * secrets, and/or confidential to Nametag, Inc. and may be covered by U.S.
- * and Foreign Patents, patents in process, and are protected by trade secret or
- * copyright law. Reproduction or distribution, in whole or in part, is
- * forbidden except by express written permission of Nametag, Inc.
- */
-
 import React, { ReactNode } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
-import wordmark from "./logo-horizontal.svg";
-import {SigninOrProfile} from "./auth/signin";
+import wordmark from "./images/logo-horizontal.svg";
+import {SigninOrProfile} from "./auth";
 
 interface PageProps {
   nav?: boolean;
@@ -23,14 +12,11 @@ interface PageProps {
 
 export const Page: React.FunctionComponent<PageProps> = ({
   children,
-  className,
   nav,
 }) => {
   return (
     <div
-      className={
-        "d-flex flex-column min-vh-100" + (className ? " " + className : "")
-      }
+      className="d-flex flex-column min-vh-100"
     >
       {nav !== false && (
         <header>
@@ -46,11 +32,11 @@ export const Page: React.FunctionComponent<PageProps> = ({
                 <LinkContainer to="/manage/apps">
                   <Nav.Link>Get a ride</Nav.Link>
                 </LinkContainer>
-              </Nav>
-              <Nav>
                 <LinkContainer to="/drive">
                   <Nav.Link>Drive for us</Nav.Link>
                 </LinkContainer>
+              </Nav>
+              <Nav>
                 <SigninOrProfile />
               </Nav>
             </Navbar.Collapse>

@@ -1,75 +1,9 @@
-// values defined by Nametag brand guide
-$nt-primary-blue: #123ab2;
-$nt-primary-green: #00ffaa;
-$nt-secondary-green: #4cd9aa;
-$nt-primary-red: #ff002a;
-$nt-secondary-red: #ff6975;
-$nt-gray-1: #e9ebf2;
-$nt-gray-2: #ced1d9;
-$nt-gray-3: #a6a9b3;
-$nt-gray-4: #797e8c;
-$nt-gray-5: #4d5366;
-$nt-gray-6: #0d101a;
-$nt-font-family: "Avenir Next";
-
-// semantic colors
-$nt-light-blue: #e5ecff;
-$nt-light-green: #d7f5eb;
-$nt-light-yellow: #fff5e0;
-$nt-light-red: #ffe5ea;
-
-// map brand values onto bootstrap variable
-$blue: $nt-light-blue;
-$red: $nt-light-red;
-$yellow: $nt-light-yellow;
-$green: $nt-light-green;
-
-$primary: $nt-primary-blue;
-$success: $nt-primary-green;
-$info: $nt-light-blue;
-$warning: $nt-light-yellow;
-$danger: $nt-light-red;
-
 @import "node_modules/bootstrap/scss/bootstrap";
-@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap");
-
-@mixin fix-button-text($text_color) {
-  color: $text_color;
-  @include hover() {
-    color: darken($text_color, 7.5%);
-  }
-  &:focus,
-  &.focus {
-    color: darken($text_color, 7.5%);
-  }
-  &:disabled,
-  &.disabled {
-    color: $text_color;
-  }
-}
-
-// danger buttons look weird with black text
-.btn-success {
-  @include fix-button-text(darken($success, 28%));
-}
-.btn-info {
-  @include fix-button-text(darken($info, 65%));
-}
-.btn-warning {
-  @include fix-button-text(darken($warning, 65%));
-}
-.btn-danger {
-  @include fix-button-text(darken($danger, 65%));
-}
 
 .mainnav {
-
-  // nametag wordmark
   .navbar-brand {
     .wordmark {
       width: 175px;
     }
   }
 }
-
-//@import "./splash";
