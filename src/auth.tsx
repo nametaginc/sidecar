@@ -21,8 +21,6 @@ const scopes = ["nt:email", "nt:name"]
 
 export const SigninOrProfile: React.FunctionComponent<{}> = () => {
     const location = useLocation();
-    const history = useHistory();
-
     if (!nametag.SignedIn()) {
         return (
             <Nav.Link onClick={async () => {
@@ -30,7 +28,7 @@ export const SigninOrProfile: React.FunctionComponent<{}> = () => {
                 const url = await nametag.AuthorizeURL(scopes, state);
                 window.location.assign(url);
             }}>
-                <img src={nametag.server + "/button.svg"}/>
+                <img alt="Say hellow with Nametag" src={nametag.server + "/button.svg"}/>
             </Nav.Link>
         )
     }
@@ -42,7 +40,7 @@ export const ProfileMenu: React.FunctionComponent<{}> = () => {
     const [profile, setProfile] = useState<Profile|null>(null)
     useEffect(() => {
         GetProfile().then(setProfile)
-    })
+    }, [])
     if (!profile) {
         return <Spinner animation={"border"}/>;
     }
