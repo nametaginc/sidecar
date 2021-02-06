@@ -6,6 +6,12 @@
 # Create a site with, e.g.:
 #   npx netlify sites:create --name sidecar-ninja-prod
 
+.PHONY: run
+run:
+	REACT_APP_NAMETAG_SERVER=https://$(USER).nametagdev.com \
+	  REACT_APP_NAMETAG_CLIENT_ID="319f99a0-1020-4774-b384-e3498e1fa5f9" \
+	  yarn start
+
 .PHONY: build-production
 build-production:
 	[ ! -d build ] || rm -rf build
