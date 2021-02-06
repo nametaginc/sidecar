@@ -21,7 +21,28 @@ const scopes = ["nt:email", "nt:name"]
 
 export const SigninOrProfile: React.FunctionComponent<{}> = () => {
     const location = useLocation();
-    if (!nametag.SignedIn()) {
+
+    // undefined => pending, null => not logged in, !null => logged in
+    const [profile, setProfile] = useState<Profile|null|undefined>(undefined)
+
+    useEffect(() => {
+        getData()
+    }, [])
+    const getData = async () => {
+        if (!nametag.SignedIn()) {
+            setProfile(null);
+            return
+        }
+        const p = await GetProfile()
+        setProfile(p || null)
+    }
+
+
+    if (profile === undefined) {
+        return <Spinner animation={"border"}/>;
+    }
+
+    if (profile === null) {
         return (
             <Nav.Link onClick={async () => {
                 const state = location.pathname // pass the current URL through the signin process
@@ -33,25 +54,18 @@ export const SigninOrProfile: React.FunctionComponent<{}> = () => {
         )
     }
 
-    return <ProfileMenu/>
-}
-
-export const ProfileMenu: React.FunctionComponent<{}> = () => {
-    const [profile, setProfile] = useState<Profile|null>(null)
-    useEffect(() => {
-        GetProfile().then(setProfile)
-    }, [])
-    if (!profile) {
-        return <Spinner animation={"border"}/>;
+    const signout = async () => {
+        await nametag.Signout()
+        setProfile(null)
     }
 
-    const greeting = profile.name || profile.email
+    const greeting = profile.name || profile.email || 'Anonymous'
     return (
         <NavDropdown
             title={"Hello, " + greeting}
             id={"signin-dropdown"}
         >
-            <NavDropdown.Item onClick={() => nametag.Signout()}>
+            <NavDropdown.Item onClick={signout}>
                 Signout
             </NavDropdown.Item>
         </NavDropdown>
