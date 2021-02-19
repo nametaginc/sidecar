@@ -23,7 +23,7 @@ class Profile {
 }
 
 export const GetProfile = async (): Promise<Profile|null> => {
-  const props = await nametag.GetProperties(['nt:name', 'nt:email'])
+  const props = await nametag.GetProperties(['nt:name', 'nt:email', 'nt:legal_name'])
   if (!props) {
     return null
   }
@@ -42,7 +42,7 @@ export const GetProfile = async (): Promise<Profile|null> => {
   return rv
 }
 
-const scopes = ['nt:email', 'nt:name']
+const scopes = ['nt:email', 'nt:name', 'nt:legal_name']
 
 export const SigninOrProfile: React.FunctionComponent<{}> = () => {
   const location = useLocation()
