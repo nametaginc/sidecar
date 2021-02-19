@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import firebase from 'firebase'
 import { nametag } from './auth'
 
@@ -15,7 +15,6 @@ firebase.initializeApp({
 })
 
 export const FirebasePage = () => {
-  const container = useRef<HTMLDivElement>(null)
   const [user, setUser] = useState<firebase.User|null>()
 
   useEffect(() => {
@@ -43,7 +42,6 @@ export const FirebasePage = () => {
             await firebase.auth().signOut()
             setUser(firebase.auth().currentUser)
           }}>Signout</Button>
-          <div ref={container}></div>
       </>
   )
 }
