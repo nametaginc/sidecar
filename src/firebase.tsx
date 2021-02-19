@@ -34,7 +34,7 @@ export const FirebasePage = () => {
       <>
           <pre>current user: {JSON.stringify(user, null, '  ')}</pre>
           <Button onClick={async () => {
-            const url = await nametag.AuthorizeURL(['nt:email', 'nt:name'], '/firebase')
+            const url = await nametag.AuthorizeURL(['nt:email', 'nt:name', 'nt:email:unverified'], '/firebase')
             console.log(url)
             window.location.assign(url)
           }}>Sign in</Button>
