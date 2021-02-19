@@ -18,7 +18,7 @@ build-production:
 	REACT_APP_NAMETAG_SERVER=https://nametag.co \
 		REACT_APP_NAMETAG_CLIENT_ID="6f9434c1-4f0b-45dc-98c5-6224f1c23459" \
 		yarn build
-	npx netlify deploy --site=example.nametag.co --prod --dir build
+	npx netlify deploy --site=trynametag.com --prod --dir build
 
 .PHONY: build-staging
 build-staging:
