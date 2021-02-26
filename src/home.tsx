@@ -1,6 +1,7 @@
 import React from 'react'
 import { Page } from './page'
 import { Button, Card, Col, Row, Alert } from 'react-bootstrap'
+import { Phone } from './phone'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons'
@@ -44,6 +45,9 @@ export const HomePage = () => (
             </Col>
             <Col md={4}>
                 <Driver image={require('./images/ride002.jpg').default} name={'Connie'} rating={5} />
+            </Col>
+            <Col md={4}>
+                <Phone />
             </Col>
         </Row>
     </Page>
