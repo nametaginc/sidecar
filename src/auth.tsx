@@ -6,6 +6,9 @@ import { Alert, Nav, NavDropdown, Spinner } from 'react-bootstrap'
 import { Auth } from '@nametag/browser'
 
 import { Page } from './page'
+import { useQuery } from 'react-query'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 
 export const nametag = new Auth({
   // get your client ID for your app from https://nametag.co/manage
@@ -47,40 +50,41 @@ const scopes = ['nt:email', 'nt:name', 'nt:legal_name']
 export const SigninOrProfile: React.FunctionComponent<{}> = () => {
   const location = useLocation()
 
-  // undefined => pending, null => not logged in, !null => logged in
-  const [profile, setProfile] = useState<Profile|null|undefined>(undefined)
-
-  const getData = async () => {
+  const profileQuery = useQuery<Profile|null>(['profile'], async () => {
     if (!nametag.SignedIn()) {
-      setProfile(null)
-      return
+      return null
     }
     const p = await GetProfile()
-    setProfile(p || null)
-  }
-  useEffect(() => {
-    getData()
-  }, [])
+    return p || null
+  })
 
-  if (profile === undefined) {
+  if (profileQuery.isLoading) {
     return <Spinner animation={'border'}/>
   }
 
-  if (profile === null) {
+  const profile = profileQuery.data
+  if (!profile) {
     return (
-        <Nav.Link onClick={async () => {
-          const state = location.pathname // pass the current URL through the signin process
-          const url = await nametag.AuthorizeURL(scopes, state)
-          window.location.assign(url)
-        }}>
-            <img alt="Say hellow with Nametag" src={nametag.server + '/button.svg'}/>
-        </Nav.Link>
+        <>
+            {profileQuery.isError &&
+            <Nav.Link onClick={() => profileQuery.refetch()}>
+                <FontAwesomeIcon icon={faExclamationTriangle} />
+            </Nav.Link>}
+            <Nav.Link onClick={async () => {
+              const state = location.pathname // pass the current URL through the signin process
+              const url = await nametag.AuthorizeURL(scopes, state)
+              window.location.assign(url)
+            }}>
+                <img alt="Say hellow with Nametag" src={nametag.server + '/button.svg'}/>
+            </Nav.Link>
+        </>
     )
   }
 
   const signout = async () => {
     await nametag.Signout()
-    setProfile(null)
+    await profileQuery.remove()
+    await profileQuery.refetch()
   }
 
   const greeting = profile.name || profile.email || 'Anonymous'
