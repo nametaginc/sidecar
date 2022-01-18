@@ -73,9 +73,11 @@ export const SigninOrProfile: React.FunctionComponent<{}> = () => {
             <Nav.Link onClick={async () => {
               const state = location.pathname // pass the current URL through the signin process
               const url = await nametag.AuthorizeURL(scopes, state)
+              const qrurl = await nametag.AuthorizeURL(scopes, state, true) // true means "send QR Image"
               window.location.assign(url)
             }}>
                 <img alt="Say hellow with Nametag" src={nametag.server + '/button.svg'}/>
+		<img src={qrurl}/>
             </Nav.Link>
         </>
     )
