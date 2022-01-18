@@ -37,7 +37,7 @@ export const HomePage = () => (
 
             <p><a href="https://github.com/nametaginc/sidecar">Source on Github</a></p>
 
-            <div><a href="https://nametag.co/manage">Nametag developer console</a></div>
+            <div><a href="https://console.nametag.co">Nametag developer console</a></div>
         </Alert>
         <Row>
             <Col md={4}>
