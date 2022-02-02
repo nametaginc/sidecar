@@ -22,11 +22,10 @@ if (process.env.REACT_APP_NAMETAG_SERVER) {
 
 class Profile {
   name: string = ''
-  email: string = ''
 }
 
 export const GetProfile = async (): Promise<Profile|null> => {
-  const props = await nametag.GetProperties(['nt:name', 'nt:email', 'nt:legal_name'])
+  const props = await nametag.GetProperties(['nt:name', 'nt:legal_name'])
   if (!props) {
     return null
   }
@@ -37,15 +36,10 @@ export const GetProfile = async (): Promise<Profile|null> => {
     rv.name = nameProp.value as string
   }
 
-  const emailProp = props.get('nt:email')
-  if (emailProp) {
-    rv.email = emailProp.value as string
-  }
-
   return rv
 }
 
-const scopes = ['nt:email', 'nt:name', 'nt:legal_name']
+const scopes = ['nt:name', 'nt:legal_name']
 
 export const SigninOrProfile: React.FunctionComponent<{}> = () => {
   const location = useLocation()
@@ -89,7 +83,7 @@ export const SigninOrProfile: React.FunctionComponent<{}> = () => {
     await profileQuery.refetch()
   }
 
-  const greeting = profile.name || profile.email || 'Anonymous'
+  const greeting = profile.name || 'Anonymous'
   return (
       <NavDropdown
             title={'Hello, ' + greeting}
